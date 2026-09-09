@@ -20,3 +20,12 @@ my_project/
     ├── __init__.py
     └── test_main.py
 ```
+
+## Usage 
+
+```bash
+./boiler.sh my_project
+```
+```bash
+./boiler.sh my_project --author "Jane Doe" --description "A tool that does things" --python-version 3.11
+```
