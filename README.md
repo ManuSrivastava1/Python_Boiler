@@ -13,8 +13,8 @@ my_project/
 ├── .venv/
 │
 ├── src/
-│   ├── __init__.py
 │   └── main.py
+│   
 │
 └── tests/
     ├── __init__.py
