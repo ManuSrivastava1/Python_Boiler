@@ -187,3 +187,20 @@ EOF
 
 echo "Created project at $(cd "$PROJECT_DIR" && pwd)"
 echo "  source: src/"
+
+# --- Locate a Python interpreter ---
+PYTHON_BIN=""
+for candidate in python3 python; do
+    if command -v "$candidate" >/dev/null 2>&1 && "$candidate" -c "" >/dev/null 2>&1; then
+        PYTHON_BIN="$candidate"
+        break
+    fi
+done
+
+if [[ -z "$PYTHON_BIN" ]]; then
+    echo "Error: no working python3/python interpreter found on PATH" >&2
+    exit 1
+fi
+
+# --- Create the virtual environment ---
+"$PYTHON_BIN" -m venv "${PROJECT_DIR}/.venv"
