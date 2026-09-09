@@ -156,9 +156,6 @@ pytest
 \`\`\`
 EOF
 
-# --- src/__init__.py ---
-touch "${SRC_DIR}/__init__.py"
-
 # --- src/main.py ---
 cat > "${SRC_DIR}/main.py" <<EOF
 import sys
