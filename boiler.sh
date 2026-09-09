@@ -30,9 +30,24 @@ EOF
 PROJECT_NAME="$1"
 shift
 
+# --- Locate a Python interpreter ---
+PYTHON_BIN=""
+for candidate in python3 python; do
+    if command -v "$candidate" >/dev/null 2>&1 && "$candidate" -c "" >/dev/null 2>&1; then
+        PYTHON_BIN="$candidate"
+        break
+    fi
+done
+
+if [[ -z "$PYTHON_BIN" ]]; then
+    echo "Error: no working python3/python interpreter found on PATH" >&2
+    exit 1
+fi
+
 AUTHOR=""
 DESCRIPTION=""
-PYTHON_VERSION="3.10"
+#PYTHON_VERSION="3.10"
+PYTHON_VERSION=$("$PYTHON_BIN" -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')
 BASE_PATH="."
 
 while [[ $# -gt 0 ]]; do
@@ -156,6 +171,9 @@ pytest
 \`\`\`
 EOF
 
+# --- src/__init__.py ---
+touch "${SRC_DIR}/__init__.py"
+
 # --- src/main.py ---
 cat > "${SRC_DIR}/main.py" <<EOF
 import sys
@@ -185,19 +203,6 @@ EOF
 echo "Created project at $(cd "$PROJECT_DIR" && pwd)"
 echo "  source: src/"
 
-# --- Locate a Python interpreter ---
-PYTHON_BIN=""
-for candidate in python3 python; do
-    if command -v "$candidate" >/dev/null 2>&1 && "$candidate" -c "" >/dev/null 2>&1; then
-        PYTHON_BIN="$candidate"
-        break
-    fi
-done
-
-if [[ -z "$PYTHON_BIN" ]]; then
-    echo "Error: no working python3/python interpreter found on PATH" >&2
-    exit 1
-fi
 
 # --- Create the virtual environment ---
 "$PYTHON_BIN" -m venv "${PROJECT_DIR}/.venv"
